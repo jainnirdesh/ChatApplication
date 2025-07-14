@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            min-width: 300px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .chat-screen {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            min-width: 400px;
+        }
+        .chat-screen.active {
+            display: block;
+        }
+        .login-container.hidden {
+            display: none;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        .notification.error {
+            background: #e74c3c;
+        }
+        .notification.success {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-container" class="login-container">
+        <h1>Simple Chat Test</h1>
+        <input type="text" id="username-input" placeholder="Enter your username">
+        <button id="join-btn">Join Chat</button>
+    </div>
+
+    <div id="chat-screen" class="chat-screen">
+        <h2>Welcome to Chat!</h2>
+        <p>Username: <span id="current-user"></span></p>
+        <button id="logout-btn">Logout</button>
+    </div>
+
+    <script>
+        console.log('Script loaded');
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        function handleLogin() {
+            console.log('handleLogin called');
+            
+            const username = document.getElementById('username-input').value.trim();
+            console.log('Username:', username);
+            
+            if (!username) {
+                showNotification('Please enter a username', 'error');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showNotification('Username must be at least 3 characters long', 'error');
+                return;
+            }
+            
+            // Show chat screen
+            document.getElementById('login-container').classList.add('hidden');
+            document.getElementById('chat-screen').classList.add('active');
+            document.getElementById('current-user').textContent = username;
+            
+            showNotification(`Welcome ${username}!`, 'success');
+        }
+        
+        function handleLogout() {
+            console.log('handleLogout called');
+            
+            document.getElementById('login-container').classList.remove('hidden');
+            document.getElementById('chat-screen').classList.remove('active');
+            document.getElementById('username-input').value = '';
+        }
+        
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM ready');
+            
+            const joinBtn = document.getElementById('join-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const usernameInput = document.getElementById('username-input');
+            
+            console.log('Join button:', joinBtn);
+            console.log('Username input:', usernameInput);
+            
+            if (joinBtn) {
+                joinBtn.addEventListener('click', handleLogin);
+                console.log('Join button listener added');
+            }
+            
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+                console.log('Logout button listener added');
+            }
+            
+            if (usernameInput) {
+                usernameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        handleLogin();
+                    }
+                });
+                console.log('Username input listener added');
+            }
+        });
+    </script>
+</body>
+</html>
