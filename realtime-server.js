@@ -213,7 +213,7 @@ io.on('connection', (socket) => {
         if (!user) return;
         
         const { newRoom } = data;
-        const oldRoom = user.room;
+        const oldRoom = user.currentRoom;
         
         // Leave old room
         socket.leave(oldRoom);
@@ -222,7 +222,7 @@ io.on('connection', (socket) => {
         socket.join(newRoom);
         
         // Update user's room
-        user.room = newRoom;
+        user.currentRoom = newRoom;
         activeUsers.set(socket.id, user);
         
         console.log(`${user.username} switched from ${oldRoom} to ${newRoom}`);
@@ -303,14 +303,14 @@ io.on('connection', (socket) => {
         
         // Move all users in deleted room to general
         const usersInRoom = Array.from(activeUsers.entries())
-            .filter(([_, userData]) => userData.room === roomId);
+            .filter(([_, userData]) => userData.currentRoom === roomId);
         
         usersInRoom.forEach(([socketId, userData]) => {
             const userSocket = io.sockets.sockets.get(socketId);
             if (userSocket) {
                 userSocket.leave(roomId);
                 userSocket.join('general');
-                userData.room = 'general';
+                userData.currentRoom = 'general';
                 activeUsers.set(socketId, userData);
                 
                 // Send general room messages
@@ -337,7 +337,7 @@ io.on('connection', (socket) => {
             console.log(`${user.username} disconnected`);
             
             // Notify others in the room
-            socket.to(user.room).emit('user-left', {
+            socket.to(user.currentRoom).emit('user-left', {
                 username: user.username,
                 message: `${user.username} left the chat`,
                 time: new Date().toLocaleTimeString()
@@ -347,14 +347,14 @@ io.on('connection', (socket) => {
             activeUsers.delete(socket.id);
             
             // Update room user list
-            updateRoomUsers(user.room);
+            updateRoomUsers(user.currentRoom);
         }
     });
     
     // Function to update user list for a room
     function updateRoomUsers(room) {
         const usersInRoom = Array.from(activeUsers.values())
-            .filter(user => user.room === room)
+            .filter(user => user.currentRoom === room)
             .map(user => user.username);
         
         io.to(room).emit('room-users-updated', {
