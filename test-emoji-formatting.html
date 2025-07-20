@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji & Formatting Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .feature { margin: 10px 0; padding: 10px; background: #f8f9fa; }
+        code { background: #e9ecef; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Emoji & Formatting Functionality Test</h1>
+    
+    <div class="test-section">
+        <h3>🎯 Test Instructions:</h3>
+        <ol>
+            <li>Open the main chat application: <a href="working-index.html" target="_blank">working-index.html</a></li>
+            <li>Login with any username</li>
+            <li><strong>Test Emoji Button (😀):</strong>
+                <ul>
+                    <li>Click the smile icon in the chat header</li>
+                    <li>Emoji picker should appear with a grid of emojis</li>
+                    <li>Click any emoji to insert it into the message input</li>
+                    <li>Send the message to see the emoji displayed</li>
+                </ul>
+            </li>
+            <li><strong>Test Formatting Button (B):</strong>
+                <ul>
+                    <li>Type some text in the message input</li>
+                    <li>Select the text with your mouse</li>
+                    <li>Click the bold icon (B) in the chat header</li>
+                    <li>Formatting toolbar should appear</li>
+                    <li>Try different formatting options (bold, italic, underline, code)</li>
+                    <li>Send formatted messages to see them rendered</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h3>✨ Features Implemented:</h3>
+        
+        <div class="feature">
+            <h4>🎭 Emoji Picker:</h4>
+            <ul>
+                <li>✅ Toggle button in chat header</li>
+                <li>✅ Grid of popular emojis</li>
+                <li>✅ Click to insert at cursor position</li>
+                <li>✅ Auto-hide after selection</li>
+                <li>✅ Click outside to close</li>
+            </ul>
+        </div>
+        
+        <div class="feature">
+            <h4>📝 Text Formatting:</h4>
+            <ul>
+                <li>✅ Bold: <code>**text**</code> → <strong>text</strong></li>
+                <li>✅ Italic: <code>*text*</code> → <em>text</em></li>
+                <li>✅ Underline: <code>__text__</code> → <u>text</u></li>
+                <li>✅ Code: <code>`text`</code> → <code>text</code></li>
+                <li>✅ Select text first, then apply formatting</li>
+                <li>✅ Visual formatting in sent messages</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h3>🔧 Expected Behavior:</h3>
+        <ul>
+            <li>✅ Emoji button toggles emoji picker on/off</li>
+            <li>✅ Formatting button toggles formatting toolbar on/off</li>
+            <li>✅ Only one panel open at a time</li>
+            <li>✅ Buttons show active state when panels are open</li>
+            <li>✅ Emojis insert at cursor position</li>
+            <li>✅ Formatting requires text selection</li>
+            <li>✅ Formatted messages display correctly</li>
+            <li>✅ Panels close when clicking outside</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>🧪 Test Examples:</h3>
+        <div class="feature">
+            <h4>Try these test messages:</h4>
+            <ul>
+                <li>Hello 😀 welcome to the chat! 🎉</li>
+                <li>This is **bold text** and this is *italic*</li>
+                <li>Check out this __underlined text__</li>
+                <li>Here's some `code formatting` in action</li>
+                <li>Mixed: **Bold** with 😎 emoji and `code`!</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h3>📋 Verification Checklist:</h3>
+        <ul>
+            <li>□ Emoji button shows active state when picker is open</li>
+            <li>□ Formatting button shows active state when toolbar is open</li>
+            <li>□ Emoji picker appears in bottom-right area</li>
+            <li>□ Formatting toolbar appears in bottom-left area</li>
+            <li>□ Clicking emojis inserts them correctly</li>
+            <li>□ Text formatting works with selection</li>
+            <li>□ Formatted text renders in sent messages</li>
+            <li>□ Both panels close when clicking outside</li>
+        </ul>
+    </div>
+    
+    <script>
+        console.log('Emoji & Formatting test page loaded');
+        console.log('Click the link above to test the functionality!');
+    </script>
+</body>
+</html>

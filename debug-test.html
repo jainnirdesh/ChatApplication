@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Chat Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .debug-info {
+            background: #333;
+            color: #0f0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            height: 200px;
+            overflow-y: auto;
+        }
+        .login-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .chat-screen {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .chat-screen.active {
+            display: block;
+        }
+        .screen {
+            transition: all 0.3s ease;
+        }
+        .screen.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info" id="debug-log">
+        Debug Log:<br>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="login-container">
+            <h1>Debug Chat Test</h1>
+            <input type="text" id="username-input" placeholder="Enter username" value="testuser">
+            <button id="join-btn">Join Chat</button>
+            <p>Status: <span id="status">Ready</span></p>
+        </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="screen">
+        <div class="chat-screen">
+            <h2>Chat Interface</h2>
+            <p>Welcome: <span id="current-user"></span></p>
+            <button id="logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // Debug logging function
+        function debugLog(message) {
+            const debugDiv = document.getElementById('debug-log');
+            const timestamp = new Date().toLocaleTimeString();
+            debugDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+            console.log(`[DEBUG] ${message}`);
+        }
+
+        // Simple chat app class
+        class SimpleChatApp {
+            constructor() {
+                debugLog('Constructor called');
+                this.currentUser = null;
+                this.users = new Map();
+                
+                debugLog('Binding event listeners...');
+                this.bindEventListeners();
+            }
+
+            bindEventListeners() {
+                debugLog('Looking for DOM elements...');
+                
+                const joinBtn = document.getElementById('join-btn');
+                const usernameInput = document.getElementById('username-input');
+                const logoutBtn = document.getElementById('logout-btn');
+                
+                debugLog(`Join button found: ${!!joinBtn}`);
+                debugLog(`Username input found: ${!!usernameInput}`);
+                debugLog(`Logout button found: ${!!logoutBtn}`);
+                
+                if (joinBtn) {
+                    joinBtn.addEventListener('click', () => {
+                        debugLog('Join button clicked via addEventListener');
+                        this.handleLogin();
+                    });
+                    
+                    // Backup onclick handler
+                    joinBtn.onclick = () => {
+                        debugLog('Join button clicked via onclick');
+                        this.handleLogin();
+                    };
+                    
+                    debugLog('Event listeners added to join button');
+                }
+                
+                if (usernameInput) {
+                    usernameInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            debugLog('Enter key pressed in username input');
+                            this.handleLogin();
+                        }
+                    });
+                }
+                
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', () => {
+                        debugLog('Logout button clicked');
+                        this.handleLogout();
+                    });
+                }
+            }
+
+            handleLogin() {
+                debugLog('handleLogin function called');
+                
+                const usernameInput = document.getElementById('username-input');
+                const statusSpan = document.getElementById('status');
+                
+                if (!usernameInput) {
+                    debugLog('ERROR: Username input not found');
+                    return;
+                }
+                
+                const username = usernameInput.value.trim();
+                debugLog(`Username entered: "${username}"`);
+                
+                if (!username) {
+                    debugLog('ERROR: Empty username');
+                    if (statusSpan) statusSpan.textContent = 'Error: Please enter username';
+                    return;
+                }
+                
+                if (username.length < 3) {
+                    debugLog('ERROR: Username too short');
+                    if (statusSpan) statusSpan.textContent = 'Error: Username too short';
+                    return;
+                }
+                
+                debugLog('Username validation passed');
+                this.currentUser = username;
+                
+                if (statusSpan) statusSpan.textContent = 'Logging in...';
+                
+                debugLog('Calling showChatScreen...');
+                this.showChatScreen();
+            }
+
+            showChatScreen() {
+                debugLog('showChatScreen function called');
+                
+                const loginScreen = document.getElementById('login-screen');
+                const chatScreen = document.getElementById('chat-screen');
+                const currentUserSpan = document.getElementById('current-user');
+                
+                debugLog(`Login screen element: ${!!loginScreen}`);
+                debugLog(`Chat screen element: ${!!chatScreen}`);
+                debugLog(`Current user span: ${!!currentUserSpan}`);
+                
+                if (loginScreen) {
+                    loginScreen.classList.remove('active');
+                    debugLog('Removed active class from login screen');
+                }
+                
+                if (chatScreen) {
+                    chatScreen.classList.add('active');
+                    debugLog('Added active class to chat screen');
+                }
+                
+                if (currentUserSpan) {
+                    currentUserSpan.textContent = this.currentUser;
+                    debugLog(`Set current user text to: ${this.currentUser}`);
+                }
+                
+                debugLog('Screen transition completed');
+            }
+
+            handleLogout() {
+                debugLog('handleLogout function called');
+                
+                const loginScreen = document.getElementById('login-screen');
+                const chatScreen = document.getElementById('chat-screen');
+                const usernameInput = document.getElementById('username-input');
+                const statusSpan = document.getElementById('status');
+                
+                if (loginScreen) loginScreen.classList.add('active');
+                if (chatScreen) chatScreen.classList.remove('active');
+                if (usernameInput) usernameInput.value = '';
+                if (statusSpan) statusSpan.textContent = 'Ready';
+                
+                this.currentUser = null;
+                debugLog('Logout completed');
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            debugLog('DOM Content Loaded event fired');
+            
+            try {
+                const app = new SimpleChatApp();
+                debugLog('SimpleChatApp initialized successfully');
+                
+                // Test button immediately
+                setTimeout(() => {
+                    const joinBtn = document.getElementById('join-btn');
+                    if (joinBtn) {
+                        debugLog('Testing button accessibility...');
+                        debugLog(`Button visible: ${joinBtn.offsetWidth > 0 && joinBtn.offsetHeight > 0}`);
+                        debugLog(`Button disabled: ${joinBtn.disabled}`);
+                        debugLog(`Button style display: ${getComputedStyle(joinBtn).display}`);
+                    }
+                }, 100);
+                
+            } catch (error) {
+                debugLog(`ERROR initializing app: ${error.message}`);
+                console.error('Initialization error:', error);
+            }
+        });
+
+        // Additional event listeners for debugging
+        window.addEventListener('load', () => {
+            debugLog('Window load event fired');
+        });
+
+        window.addEventListener('error', (error) => {
+            debugLog(`JavaScript error: ${error.message}`);
+        });
+    </script>
+</body>
+</html>

@@ -194,6 +194,9 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .room-item:hover {
@@ -204,6 +207,54 @@ body {
 .room-item.active {
     background: rgba(52, 152, 219, 0.2);
     border-left-color: #3498db;
+}
+
+.room-content {
+    flex: 1;
+    cursor: pointer;
+}
+
+.room-delete-btn {
+    background: rgba(231, 76, 60, 0.8);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7em;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.room-delete-btn:hover {
+    background: #e74c3c;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.room-delete-btn:active {
+    transform: scale(0.95);
+}
+
+/* Hide delete button by default, show on hover */
+.room-item .room-delete-btn {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.room-item:hover .room-delete-btn {
+    opacity: 0.7;
+    transform: scale(1);
+}
+
+.room-item:hover .room-delete-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
 
 .room-name {
@@ -398,6 +449,29 @@ body {
 
 .message.own .message-header {
     flex-direction: row-reverse;
+}
+
+/* Message formatting styles */
+.message-content strong {
+    font-weight: bold;
+}
+
+.message-content em {
+    font-style: italic;
+}
+
+.message-content u {
+    text-decoration: underline;
+}
+
+.message-content code {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: #d63384;
 }
 
 /* Message Input */
@@ -613,192 +687,87 @@ body {
     background: #545b62;
 }
 
-/* Emoji Picker */
+/* Emoji Picker Styles */
 .emoji-picker {
     position: absolute;
-    bottom: 90px;
+    bottom: 80px;
     right: 20px;
     background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-width: 300px;
     padding: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    display: none;
-    z-index: 100;
-}
-
-.emoji-picker.active {
-    display: block;
 }
 
 .emoji-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-.emoji {
+.emoji-item {
     font-size: 1.5em;
-    padding: 5px;
+    padding: 8px;
     cursor: pointer;
     border-radius: 4px;
-    transition: background 0.3s ease;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    user-select: none;
 }
 
-.emoji:hover {
-    background: #f0f0f0;
+.emoji-item:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.1);
 }
 
-/* Notifications */
-.notification-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.notification {
-    background: #333;
-    color: white;
-    padding: 15px 20px;
+/* Formatting Toolbar Styles */
+.formatting-toolbar {
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    background: white;
+    border: 1px solid #dee2e6;
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    animation: slideIn 0.3s ease;
-    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 10px;
+    display: flex;
+    gap: 8px;
 }
 
-.notification.success {
-    background: #27ae60;
+.format-btn {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9em;
 }
 
-.notification.error {
-    background: #e74c3c;
+.format-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
 }
 
-.notification.info {
-    background: #3498db;
+.format-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
 }
 
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+/* Action button hover states */
+.action-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Text Formatting */
-.bold {
-    font-weight: bold;
-}
-
-.italic {
-    font-style: italic;
-}
-
-.underline {
-    text-decoration: underline;
-}
-
-.code {
-    background: #f4f4f4;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: monospace;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .chat-container {
-        flex-direction: column;
-    }
-    
-    .sidebar {
-        width: 100%;
-        height: auto;
-        max-height: 300px;
-        order: 2;
-    }
-    
-    .main-chat {
-        order: 1;
-        height: calc(100vh - 300px);
-    }
-    
-    .login-container {
-        margin: 20px;
-    }
-    
-    .message {
-        max-width: 85%;
-    }
-    
-    .room-section {
-        max-height: 150px;
-    }
-    
-    .online-users {
-        max-height: 100px;
-    }
-}
-
-@media (max-width: 480px) {
-    .sidebar {
-        max-height: 250px;
-    }
-    
-    .main-chat {
-        height: calc(100vh - 250px);
-    }
-    
-    .chat-header {
-        padding: 15px;
-    }
-    
-    .messages-container {
-        padding: 15px;
-    }
-    
-    .input-area {
-        padding: 15px;
-    }
-    
-    .login-container {
-        padding: 30px 20px;
-    }
-}
-
-/* Scrollbar Styles */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+.action-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
 }

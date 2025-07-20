@@ -380,3 +380,28 @@ This project demonstrates proficiency in:
 This real-time chat application represents a comprehensive web development project suitable for advanced students or junior developers. It showcases modern web technologies, best practices, and scalable architecture while maintaining simplicity and educational value.
 
 The project can serve as a foundation for more complex applications and provides a solid understanding of real-time web development concepts.
+
+## Delete Room Functionality
+
+The chat application now includes full delete room functionality:
+
+### Features:
+- **Delete Button**: Each room (except General) has a delete button (trash icon)
+- **Confirmation Dialog**: Users are prompted to confirm before deletion
+- **Safe Deletion**: The General room cannot be deleted (no delete button shown)
+- **Auto Switch**: If you're in a room being deleted, you're automatically switched to General
+- **Data Cleanup**: All messages for the deleted room are permanently removed
+- **Visual Feedback**: Success notification shown after deletion
+
+### How to Use:
+1. Login to the chat application
+2. Hover over any room in the sidebar (except General)
+3. Click the trash icon (🗑️) to delete the room
+4. Confirm the deletion in the dialog
+5. The room will be removed and you'll see a success message
+
+### Technical Implementation:
+- Room deletion prevents switching to the deleted room
+- Event propagation is properly handled to prevent accidental room switching when clicking delete
+- Room data structure is updated to include delete buttons for new rooms
+- All event listeners are properly bound for both existing and dynamically created rooms

@@ -16,6 +16,7 @@ A modern, responsive real-time chat application built with HTML, CSS, and JavaSc
 - **Message formatting** - Support for bold, italic, underline, and code formatting
 - **Emoji picker** - Built-in emoji selector for enhanced communication
 - **Room creation** - Users can create new chat rooms with descriptions
+- **Room deletion** - Delete unwanted rooms with confirmation dialog
 - **Notification system** - Visual notifications for important events
 - **Message history** - Persistent message history for each room
 - **Connection status** - Handles online/offline states
@@ -103,6 +104,12 @@ Then open `http://localhost:8000` in your browser.
 2. Enter room name and optional description
 3. Click "Create Room" to add the new room
 
+#### Deleting Rooms
+1. Hover over any room in the sidebar (except General)
+2. Click the trash icon (🗑️) to delete the room
+3. Confirm deletion in the dialog box
+4. Room will be removed with all its messages
+
 #### Message Formatting
 1. Enable formatting toolbar (bold icon in chat header)
 2. Select text and click formatting buttons
@@ -122,6 +129,9 @@ Then open `http://localhost:8000` in your browser.
 - See user count for each room
 - Switch between rooms by clicking
 - Create new rooms with custom names
+- Delete rooms (except General) using the trash icon
+- Get confirmation dialogs before deletion
+- Automatic switching to General if current room is deleted
 
 ## 🔧 Customization
 

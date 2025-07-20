@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Room Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Delete Room Functionality Test</h1>
+    
+    <div class="test-section">
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Open the main chat application in another tab: <a href="working-index.html" target="_blank">working-index.html</a></li>
+            <li>Login with any username</li>
+            <li>Try to delete the "Tech Talk" or "Random" rooms using the trash icon</li>
+            <li>Create a new room and try to delete it</li>
+            <li>Verify that the "General" room cannot be deleted (no delete button)</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h3>Expected Behavior:</h3>
+        <ul>
+            <li>✅ Delete button should appear for all rooms except "General"</li>
+            <li>✅ Clicking delete should show a confirmation dialog</li>
+            <li>✅ After confirmation, the room should be removed from the sidebar</li>
+            <li>✅ If you're in the deleted room, you should be switched to "General"</li>
+            <li>✅ Room messages should be cleared</li>
+            <li>✅ Success notification should appear</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test Status:</h3>
+        <p class="info">Click the link above to test the delete functionality!</p>
+    </div>
+    
+    <script>
+        console.log('Delete room test page loaded');
+        console.log('Open working-index.html to test the delete functionality');
+    </script>
+</body>
+</html>

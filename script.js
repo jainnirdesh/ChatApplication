@@ -140,7 +140,6 @@ class ChatApp {
     }
 
     handleLogin() {
-        console.log('=== handleLogin START ===');
         const usernameInput = document.getElementById('username-input');
         
         if (!usernameInput) {
@@ -149,22 +148,18 @@ class ChatApp {
         }
         
         const username = usernameInput.value.trim();
-        console.log('Username entered:', username);
         
         if (!username) {
-            console.log('Username is empty');
             this.showNotification('Please enter a username', 'error');
             return;
         }
 
         if (username.length < 3) {
-            console.log('Username too short');
             this.showNotification('Username must be at least 3 characters long', 'error');
             return;
         }
 
         if (username.length > 20) {
-            console.log('Username too long');
             this.showNotification('Username must be less than 20 characters', 'error');
             return;
         }
@@ -172,20 +167,16 @@ class ChatApp {
         // Check for valid characters (letters, numbers, underscores, hyphens)
         const validUsernamePattern = /^[a-zA-Z0-9_-]+$/;
         if (!validUsernamePattern.test(username)) {
-            console.log('Username has invalid characters');
             this.showNotification('Username can only contain letters, numbers, underscores, and hyphens', 'error');
             return;
         }
 
-        console.log('Username validation passed');
-        
         // For demo purposes, skip duplicate username check
         // In production, you'd want to check against a server
         const lowerUsername = username.toLowerCase();
         
         // Clear any existing user with the same name (for demo)
         if (this.users.has(lowerUsername)) {
-            console.log('Clearing existing user');
             this.users.delete(lowerUsername);
         }
 
@@ -196,27 +187,16 @@ class ChatApp {
             isOnline: true
         });
 
-        console.log('User data set, current user:', this.currentUser);
         console.log('About to show chat screen for user:', username);
-        
-        // Show success notification first
-        this.showNotification(`Welcome ${username}!`, 'success');
-        
-        // Then show chat screen
         this.showChatScreen();
         this.updateUsersList();
+        this.showNotification(`Welcome ${username}!`, 'success');
         
         // Simulate WebSocket message
-        try {
-            this.socket.send(JSON.stringify({
-                type: 'user_joined',
-                data: { username: username }
-            }));
-        } catch (error) {
-            console.error('WebSocket error:', error);
-        }
-        
-        console.log('=== handleLogin END ===');
+        this.socket.send(JSON.stringify({
+            type: 'user_joined',
+            data: { username: username }
+        }));
     }
 
     handleLogout() {
@@ -722,58 +702,94 @@ class ChatApp {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM Content Loaded - Initializing ChatApp'); // Debug log
+    console.log('DOM Content Loaded - Simple initialization');
     
-    let chatApp; // Declare outside try block
+    // Initialize the app
+    let chatApp;
     
     try {
         chatApp = new ChatApp();
-        console.log('ChatApp initialized:', chatApp); // Debug log
-        
-        // Double-check that the join button is working
-        const joinBtn = document.getElementById('join-btn');
-        if (joinBtn) {
-            console.log('Join button found, adding backup event listener');
-            joinBtn.onclick = function() {
-                console.log('Join button clicked via onclick');
-                chatApp.handleLogin();
-            };
-        } else {
-            console.error('Join button not found!');
-        }
-        
+        console.log('ChatApp initialized successfully');
     } catch (error) {
         console.error('Error initializing ChatApp:', error);
-        return; // Exit if initialization fails
+        
+        // Fallback: Simple direct event handling
+        console.log('Using fallback event handling');
+        const joinBtn = document.getElementById('join-btn');
+        const usernameInput = document.getElementById('username-input');
+        
+        if (joinBtn && usernameInput) {
+            joinBtn.onclick = function() {
+                console.log('Fallback: Join button clicked');
+                const username = usernameInput.value.trim();
+                
+                if (!username) {
+                    alert('Please enter a username');
+                    return;
+                }
+                
+                if (username.length < 3) {
+                    alert('Username must be at least 3 characters long');
+                    return;
+                }
+                
+                // Simple screen switch
+                document.getElementById('login-screen').classList.remove('active');
+                document.getElementById('chat-screen').classList.add('active');
+                document.getElementById('current-user').textContent = username;
+                
+                console.log('Fallback: Screen switched successfully');
+            };
+        }
+        return; // Exit early if fallback is used
     }
     
-    // Handle browser refresh/close
+    // Double-check event listeners
+    setTimeout(() => {
+        const joinBtn = document.getElementById('join-btn');
+        const usernameInput = document.getElementById('username-input');
+        
+        if (joinBtn) {
+            console.log('Adding backup event listener to join button');
+            joinBtn.addEventListener('click', function(e) {
+                console.log('Backup event listener triggered');
+                e.preventDefault();
+                e.stopPropagation();
+                if (chatApp && typeof chatApp.handleLogin === 'function') {
+                    chatApp.handleLogin();
+                } else {
+                    console.error('ChatApp or handleLogin not available');
+                }
+            });
+        }
+        
+        if (usernameInput) {
+            usernameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    console.log('Enter key pressed in username input');
+                    if (chatApp && typeof chatApp.handleLogin === 'function') {
+                        chatApp.handleLogin();
+                    }
+                }
+            });
+        }
+    }, 500);
+    
+    // Handle browser events
     window.addEventListener('beforeunload', () => {
         if (chatApp && chatApp.currentUser) {
             chatApp.handleLogout();
         }
     });
     
-    // Handle visibility change (tab switching)
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            // User switched away from tab
-            console.log('User switched away from chat');
-        } else {
-            // User returned to tab
-            console.log('User returned to chat');
-        }
-    });
-    
-    // Handle online/offline status
     window.addEventListener('online', () => {
-        if (chatApp) {
+        if (chatApp && typeof chatApp.showNotification === 'function') {
             chatApp.showNotification('Connection restored', 'success');
         }
     });
     
     window.addEventListener('offline', () => {
-        if (chatApp) {
+        if (chatApp && typeof chatApp.showNotification === 'function') {
             chatApp.showNotification('Connection lost', 'error');
         }
     });
