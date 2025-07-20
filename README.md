@@ -17,8 +17,9 @@ A modern, responsive real-time chat application built with HTML, CSS, and JavaSc
 - **Emoji picker** - Built-in emoji selector for enhanced communication
 - **Room creation** - Users can create new chat rooms with descriptions
 - **Room deletion** - Delete unwanted rooms with confirmation dialog
+- **Session persistence** - Stay logged in across page refreshes (24-hour sessions)
+- **Message history** - Persistent message history for each room across sessions
 - **Notification system** - Visual notifications for important events
-- **Message history** - Persistent message history for each room
 - **Connection status** - Handles online/offline states
 - **User experience** - Smooth animations and modern UI design
 

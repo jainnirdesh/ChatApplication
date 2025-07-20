@@ -405,3 +405,35 @@ The chat application now includes full delete room functionality:
 - Event propagation is properly handled to prevent accidental room switching when clicking delete
 - Room data structure is updated to include delete buttons for new rooms
 - All event listeners are properly bound for both existing and dynamically created rooms
+
+## Session Persistence Functionality
+
+The chat application now includes comprehensive session persistence to maintain user state across page refreshes:
+
+### Features:
+- **Auto-Login**: Users stay logged in when refreshing the page
+- **Room State Persistence**: Returns to the exact room you were in
+- **Message History**: All messages and custom rooms persist across sessions
+- **24-Hour Sessions**: Automatic session expiry for security
+- **Smart Restoration**: Restores complete application state seamlessly
+
+### Technical Implementation:
+- **localStorage Integration**: Client-side storage for session data
+- **Session Management**: `saveSession()`, `getSession()`, `restoreSession()`, `clearSession()`
+- **Room State Persistence**: `saveRoomState()`, `restoreRoomState()`, `saveRoomMessages()`
+- **Auto-Save Events**: Saves state on login, room switch, message send, room creation/deletion
+- **Session Validation**: Timestamp-based expiry system
+
+### Security Features:
+- Sessions automatically expire after 24 hours
+- All session data is cleared on logout
+- Client-side storage only (no server persistence)
+- Secure session validation on page load
+
+### User Experience:
+- Seamless page refresh experience
+- "Welcome back" notifications
+- Complete state restoration
+- No data loss on accidental refresh
+
+This enhancement eliminates the frustration of being redirected to the login screen on every page refresh, providing a modern, persistent chat experience.
