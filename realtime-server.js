@@ -55,7 +55,7 @@ const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     
     // Parse URL and remove query parameters
-    let filePath = req.url === '/' ? '/index.html' : req.url;
+    let filePath = req.url === '/' ? '/realtime-chat.html' : req.url;
     filePath = filePath.split('?')[0];
     
     // Build full file path
