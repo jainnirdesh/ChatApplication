@@ -321,7 +321,66 @@
                 }
                 
                 this.isLoggingIn = true;
-                console.log('handleLogin called');
+                console.log('🔥 REAL-TIME LOGIN CLICKED!');
+                
+                const usernameInput = document.getElementById('username-input');
+                const username = usernameInput.value.trim();
+                
+                console.log('Username:', username);
+                console.log('Is connected:', this.isConnected);
+                
+                if (!username) {
+                    this.showNotification('Please enter a username (at least 3 characters)', 'error');
+                    usernameInput.focus();
+                    this.isLoggingIn = false;
+                    return;
+                }
+                
+                if (username.length < 3) {
+                    this.showNotification('Username must be at least 3 characters long', 'error');
+                    usernameInput.focus();
+                    this.isLoggingIn = false;
+                    return;
+                }
+                
+                if (!this.socket || !this.socket.connected) {
+                    this.showNotification('Not connected to server. Please wait...', 'error');
+                    this.isLoggingIn = false;
+                    return;
+                }
+                
+                this.currentUser = username;
+                
+                console.log('✅ Switching to chat screen immediately...');
+                
+                // IMMEDIATE SCREEN SWITCH (like working version)
+                const loginScreen = document.getElementById('login-screen');
+                const chatScreen = document.getElementById('chat-screen');
+                const currentUserEl = document.getElementById('current-user');
+                
+                // FORCE HIDE LOGIN
+                loginScreen.classList.remove('active');
+                loginScreen.style.display = 'none';
+                
+                // FORCE SHOW CHAT
+                chatScreen.classList.add('active');
+                chatScreen.style.display = 'block';
+                
+                if (currentUserEl) {
+                    currentUserEl.textContent = username;
+                }
+                
+                this.showNotification(`Welcome ${username}! Joining real-time chat...`, 'success');
+                
+                // Emit to server for real-time features
+                console.log('Emitting user-join event...');
+                this.socket.emit('user-join', {
+                    username: username,
+                    room: this.currentRoom
+                });
+                
+                this.isLoggingIn = false;
+            }
                 
                 const usernameInput = document.getElementById('username-input');
                 const username = usernameInput.value.trim();
@@ -331,13 +390,15 @@
                 console.log('Socket state:', this.socket ? this.socket.connected : 'no socket');
                 
                 if (!username) {
-                    this.showNotification('Please enter a username', 'error');
+                    this.showNotification('Please enter a username (at least 3 characters)', 'error');
+                    usernameInput.focus();
                     this.isLoggingIn = false;
                     return;
                 }
                 
                 if (username.length < 3) {
                     this.showNotification('Username must be at least 3 characters long', 'error');
+                    usernameInput.focus();
                     this.isLoggingIn = false;
                     return;
                 }
