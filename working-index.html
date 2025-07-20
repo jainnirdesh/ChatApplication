@@ -248,10 +248,14 @@
             // Load the default room (General)
             loadRoomMessages('general');
             
-            showNotification(`Welcome ${username}!`, 'success');
-            
             // Save session
             saveSession(username);
+            
+            // Save initial room state
+            saveRoomState('general');
+            saveRoomMessages();
+            
+            showNotification(`Welcome ${username}!`, 'success');
             
             console.log('Screen switch completed');
         }
@@ -335,11 +339,13 @@
                     if (currentUser) currentUser.textContent = savedUsername;
                     if (sidebarUsername) sidebarUsername.textContent = savedUsername;
                     
-                    // Load the default room (General)
-                    loadRoomMessages('general');
-                    
-                    // Restore room state
+                    // Restore room state FIRST (before loading any messages)
                     restoreRoomState();
+                    
+                    // If no saved room, load the default room (General)
+                    if (!localStorage.getItem('chatApp_currentRoom')) {
+                        loadRoomMessages('general');
+                    }
                     
                     showNotification(`Welcome back, ${savedUsername}!`, 'success');
                     
@@ -356,26 +362,40 @@
         }
         
         function saveRoomMessages() {
+            console.log('Saving room messages to localStorage:', roomMessages);
             localStorage.setItem('chatApp_roomMessages', JSON.stringify(roomMessages));
+            console.log('Room messages saved successfully');
         }
         
         function restoreRoomState() {
             const savedRoom = localStorage.getItem('chatApp_currentRoom');
             const savedMessages = localStorage.getItem('chatApp_roomMessages');
             
+            console.log('Restoring room state...');
+            console.log('Saved room:', savedRoom);
+            console.log('Saved messages exists:', !!savedMessages);
+            
             if (savedMessages) {
                 try {
                     const parsedMessages = JSON.parse(savedMessages);
-                    // Merge with existing room messages
-                    Object.assign(roomMessages, parsedMessages);
+                    console.log('Parsed messages:', parsedMessages);
+                    // Replace existing room messages with saved ones
+                    Object.keys(parsedMessages).forEach(roomId => {
+                        roomMessages[roomId] = parsedMessages[roomId];
+                    });
+                    console.log('Room messages after restore:', roomMessages);
                 } catch (e) {
                     console.error('Error parsing saved room messages:', e);
                 }
             }
             
-            if (savedRoom) {
+            if (savedRoom && roomMessages[savedRoom]) {
+                console.log('Switching to saved room:', savedRoom);
                 currentRoom = savedRoom;
                 switchRoom(savedRoom);
+            } else {
+                console.log('No saved room or room not found, loading General');
+                loadRoomMessages('general');
             }
         }
         
@@ -733,8 +753,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded');
             
-            // Restore session if available
-            restoreSession();
+            // Initialize the application
+            initializeApp();
             restoreRoomState();
             
             // Bind login button
@@ -864,11 +884,32 @@
             console.log('All event listeners bound');
         });
         
-        // Test function for debugging
-        window.testLogin = function() {
-            console.log('Test login function called');
-            handleLogin();
-        };
+        // Initialize application with proper session restoration
+        function initializeApp() {
+            console.log('Initializing application...');
+            
+            // First, try to restore session
+            const sessionRestored = restoreSession();
+            
+            if (!sessionRestored) {
+                console.log('No session to restore, showing login screen');
+                // Make sure login screen is visible
+                const loginScreen = document.getElementById('login-screen');
+                const chatScreen = document.getElementById('chat-screen');
+                
+                if (loginScreen) {
+                    loginScreen.classList.add('active');
+                    loginScreen.style.display = 'flex';
+                }
+                
+                if (chatScreen) {
+                    chatScreen.classList.remove('active');
+                    chatScreen.style.display = 'none';
+                }
+            }
+            
+            console.log('Application initialized');
+        }
     </script>
 </body>
 </html>

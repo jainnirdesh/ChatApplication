@@ -1,77 +1,114 @@
 # Real-Time Chat Application
 
-A modern, responsive real-time chat application built with HTML, CSS, and JavaScript. This project demonstrates advanced web development concepts including WebSocket simulation, user authentication, room management, and real-time messaging.
+A modern, responsive **multi-user** real-time chat application built with Node.js, Socket.IO, HTML, CSS, and JavaScript. This project demonstrates advanced web development concepts including real-time WebSocket communication, user authentication, room management, and multi-user messaging.
 
 ## 🚀 Features
 
 ### Core Features
-- **Real-time messaging** - Messages appear instantly without page refresh
-- **User authentication** - Secure username validation and duplicate prevention
-- **Multiple chat rooms** - Create and join different chat rooms
-- **Online user list** - See who's currently online
+- **True Real-time Multi-User Messaging** - Multiple users can chat simultaneously using Socket.IO
+- **User authentication** - Secure username validation and duplicate prevention across all connected users
+- **Multiple chat rooms** - Create, join, delete, and switch between chat rooms in real-time
+- **Live online user list** - See who's currently online in each room, updated instantly
 - **Message timestamps** - Every message includes timestamp and sender info
 - **Responsive design** - Works perfectly on desktop, tablet, and mobile devices
 
 ### Advanced Features
+- **Multi-user synchronization** - All users see the same state instantly
 - **Message formatting** - Support for bold, italic, underline, and code formatting
 - **Emoji picker** - Built-in emoji selector for enhanced communication
-- **Room creation** - Users can create new chat rooms with descriptions
-- **Room deletion** - Delete unwanted rooms with confirmation dialog
-- **Session persistence** - Stay logged in across page refreshes (24-hour sessions)
-- **Message history** - Persistent message history for each room across sessions
-- **Notification system** - Visual notifications for important events
-- **Connection status** - Handles online/offline states
+- **Dynamic room management** - Users can create and delete rooms visible to all users
+- **Session persistence** - Automatic reconnection and session management
+- **Message history** - Persistent message history for each room shared across all users
+- **Real-time notifications** - Instant notifications for user joins, leaves, and room changes
+- **Connection status indicators** - Visual feedback for online/offline states
 - **User experience** - Smooth animations and modern UI design
 
 ## 🛠️ Technical Implementation
 
+### Backend Technologies
+- **Node.js** - Server-side JavaScript runtime
+- **Socket.IO** - Real-time WebSocket communication
+- **HTTP Server** - File serving and routing
+- **In-memory storage** - Room and user management
+
 ### Frontend Technologies
 - **HTML5** - Semantic markup and structure
 - **CSS3** - Modern styling with flexbox, grid, and animations
-- **JavaScript (ES6+)** - Object-oriented programming with classes
+- **JavaScript (ES6+)** - Client-side Socket.IO integration
 - **Font Awesome** - Professional icon library
 - **Google Fonts** - Custom typography (Poppins)
 
 ### Key Components
-- **ChatApp Class** - Main application controller
-- **WebSocket Simulation** - Real-time communication simulation
-- **User Management** - Registration, authentication, and online status
-- **Room Management** - Dynamic room creation and management
-- **Message System** - Formatted messaging with validation
-- **Notification System** - User feedback and alerts
+- **Real-time Server** (`realtime-server.js`) - Socket.IO server with room/user management
+- **Real-time Client** (`realtime-chat.html`) - Socket.IO client with live updates
+- **Multi-user Architecture** - Synchronized state across all connected clients
+- **Room Management** - Dynamic room creation, deletion, and switching
+- **User Management** - Real-time user tracking and duplicate prevention
+- **Message Broadcasting** - Instant message delivery to all room participants
 
 ## 📁 Project Structure
 
 ```
 ChatApplication/
-├── index.html          # Main HTML structure
-├── styles.css          # Complete CSS styling
-├── script.js           # JavaScript application logic
-├── README.md          # Project documentation
-└── LICENSE            # License file
+├── realtime-server.js     # Node.js Socket.IO server (MAIN)
+├── realtime-chat.html     # Real-time multi-user client (MAIN)
+├── package.json           # Node.js dependencies
+├── styles.css             # Complete CSS styling
+├── test-multiuser.html    # Multi-user testing interface
+├── demo.sh               # Demo script
+├── index.html            # Static version (legacy)
+├── script.js             # Static version logic (legacy)
+├── README.md             # Project documentation
+├── TECHNICAL_DOCS.md     # Technical implementation details
+└── test-*.html           # Various test and debug pages
 ```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+- **Node.js** (v14 or higher) - Required for the real-time server
 - Modern web browser (Chrome, Firefox, Safari, Edge)
-- No additional software installation required
 
 ### Installation & Setup
 
 1. **Clone or download** the project to your local machine
-2. **Open the project folder** in your preferred code editor
-3. **Launch the application** by opening `index.html` in a web browser
+2. **Navigate to the project directory**
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-### Running the Application
+### Running the Real-Time Application
 
-#### Method 1: Direct Browser Opening
+#### Start the Server
 ```bash
 # Navigate to project directory
 cd ChatApplication
 
-# Open index.html in your default browser
-open index.html        # macOS
+# Start the real-time server
+node realtime-server.js
+```
+
+The server will start on `http://localhost:8000`
+
+#### Access the Application
+1. Open your browser and go to: `http://localhost:8000/realtime-chat.html`
+2. Or use the demo script:
+   ```bash
+   ./demo.sh
+   ```
+3. Or use the multi-user test page: `http://localhost:8000/test-multiuser.html`
+
+#### Testing Multi-User Functionality
+1. Open the multi-user test page: `http://localhost:8000/test-multiuser.html`
+2. Click the buttons to open multiple chat windows
+3. Use different usernames in each window (e.g., "Alice", "Bob", "Charlie")
+4. Test real-time messaging between users
+5. Try room switching, creation, and deletion
+6. Observe real-time user list updates
+
+### Legacy Static Version
+For the original static version (single-user simulation), simply open `index.html` in a browser.
 start index.html       # Windows
 xdg-open index.html    # Linux
 ```
