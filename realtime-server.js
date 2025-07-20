@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { Server } = require('socket.io');
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 // Store active users and room data
 const activeUsers = new Map();
@@ -121,7 +121,9 @@ const server = http.createServer((req, res) => {
 // Create Socket.IO server
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: process.env.NODE_ENV === 'production' 
+            ? ["https://your-app-name.vercel.app", "https://your-app-name.herokuapp.com"]
+            : "*",
         methods: ["GET", "POST"]
     }
 });

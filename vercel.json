@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "realtime-server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/realtime-server.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
