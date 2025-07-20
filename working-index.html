@@ -242,10 +242,16 @@
             if (currentUser) currentUser.textContent = username;
             if (sidebarUsername) sidebarUsername.textContent = username;
             
+            // Save session
+            saveSession(username);
+            
             // Load the default room (General)
             loadRoomMessages('general');
             
             showNotification(`Welcome ${username}!`, 'success');
+            
+            // Save session
+            saveSession(username);
             
             console.log('Screen switch completed');
         }
@@ -266,7 +272,116 @@
                 loginScreen.style.display = 'flex';
                 
                 if (usernameInput) usernameInput.value = '';
+                
+                // Clear session
+                clearSession();
+                
+                // Clear room state
+                clearRoomState();
+                
+                showNotification('Logged out successfully', 'info');
             }
+        }
+        
+        // Session management functions
+        function saveSession(username) {
+            localStorage.setItem('chatApp_username', username);
+            localStorage.setItem('chatApp_loginTime', Date.now().toString());
+        }
+        
+        function getSession() {
+            const username = localStorage.getItem('chatApp_username');
+            const loginTime = localStorage.getItem('chatApp_loginTime');
+            
+            // Check if session exists and is less than 24 hours old
+            if (username && loginTime) {
+                const sessionAge = Date.now() - parseInt(loginTime);
+                const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+                
+                if (sessionAge < maxAge) {
+                    return username;
+                }
+            }
+            
+            return null;
+        }
+        
+        function clearSession() {
+            localStorage.removeItem('chatApp_username');
+            localStorage.removeItem('chatApp_loginTime');
+        }
+        
+        function restoreSession() {
+            const savedUsername = getSession();
+            
+            if (savedUsername) {
+                console.log('Restoring session for:', savedUsername);
+                
+                const loginScreen = document.getElementById('login-screen');
+                const chatScreen = document.getElementById('chat-screen');
+                const currentUser = document.getElementById('current-user');
+                const sidebarUsername = document.getElementById('sidebar-username');
+                
+                if (loginScreen && chatScreen) {
+                    // Hide login screen
+                    loginScreen.classList.remove('active');
+                    loginScreen.style.display = 'none';
+                    
+                    // Show chat screen
+                    chatScreen.classList.add('active');
+                    chatScreen.style.display = 'block';
+                    
+                    // Update username displays
+                    if (currentUser) currentUser.textContent = savedUsername;
+                    if (sidebarUsername) sidebarUsername.textContent = savedUsername;
+                    
+                    // Load the default room (General)
+                    loadRoomMessages('general');
+                    
+                    // Restore room state
+                    restoreRoomState();
+                    
+                    showNotification(`Welcome back, ${savedUsername}!`, 'success');
+                    
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        // Extended session management for room state
+        function saveRoomState(roomName) {
+            localStorage.setItem('chatApp_currentRoom', roomName);
+        }
+        
+        function saveRoomMessages() {
+            localStorage.setItem('chatApp_roomMessages', JSON.stringify(roomMessages));
+        }
+        
+        function restoreRoomState() {
+            const savedRoom = localStorage.getItem('chatApp_currentRoom');
+            const savedMessages = localStorage.getItem('chatApp_roomMessages');
+            
+            if (savedMessages) {
+                try {
+                    const parsedMessages = JSON.parse(savedMessages);
+                    // Merge with existing room messages
+                    Object.assign(roomMessages, parsedMessages);
+                } catch (e) {
+                    console.error('Error parsing saved room messages:', e);
+                }
+            }
+            
+            if (savedRoom) {
+                currentRoom = savedRoom;
+                switchRoom(savedRoom);
+            }
+        }
+        
+        function clearRoomState() {
+            localStorage.removeItem('chatApp_currentRoom');
+            localStorage.removeItem('chatApp_roomMessages');
         }
         
         // Room data storage
@@ -301,6 +416,9 @@
             console.log('Switching to room:', roomName);
             
             currentRoom = roomName;
+            
+            // Save current room state
+            saveRoomState(roomName);
             
             // Update active room in sidebar
             document.querySelectorAll('.room-item').forEach(item => {
@@ -381,6 +499,9 @@
                 switchRoom('general');
             }
             
+            // Save room messages after deletion
+            saveRoomMessages();
+            
             showNotification('Room deleted successfully', 'success');
         }
 
@@ -441,6 +562,9 @@
             
             showNotification(`Room "${roomName}" created successfully!`, 'success');
             
+            // Save room messages after creating new room
+            saveRoomMessages();
+            
             // Switch to the new room
             switchRoom(roomId);
         }
@@ -471,6 +595,9 @@
             };
             
             roomMessages[currentRoom].push(newMessage);
+            
+            // Save room messages to localStorage
+            saveRoomMessages();
             
             // Display the message
             const messageElement = document.createElement('div');
@@ -605,6 +732,10 @@
         // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded');
+            
+            // Restore session if available
+            restoreSession();
+            restoreRoomState();
             
             // Bind login button
             const joinBtn = document.getElementById('join-btn');
