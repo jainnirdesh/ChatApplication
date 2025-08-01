@@ -207,6 +207,7 @@
                 
                 this.initializeSocket();
                 this.bindEvents();
+                this.handleMobileKeyboard(); // Initialize mobile keyboard handling
             }
             
             initializeSocket() {
@@ -820,6 +821,39 @@
                 // Close mobile sidebar when switching to desktop view
                 if (window.innerWidth > 768) {
                     this.closeMobileSidebar();
+                }
+                
+                // Handle mobile keyboard for iOS and Android
+                this.handleMobileKeyboard();
+            }
+            
+            handleMobileKeyboard() {
+                if (window.innerWidth <= 768) {
+                    const messageInput = document.getElementById('message-input');
+                    const messagesContainer = document.querySelector('.messages-container');
+                    
+                    // Scroll to bottom when input is focused (keyboard opens)
+                    messageInput.addEventListener('focus', () => {
+                        setTimeout(() => {
+                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        }, 300); // Wait for keyboard animation
+                    });
+                    
+                    // Handle viewport changes on mobile (keyboard open/close)
+                    if (window.visualViewport) {
+                        window.visualViewport.addEventListener('resize', () => {
+                            const inputContainer = document.querySelector('.message-input-container');
+                            if (inputContainer) {
+                                // Adjust input position when keyboard is open
+                                const keyboardHeight = window.innerHeight - window.visualViewport.height;
+                                if (keyboardHeight > 0) {
+                                    inputContainer.style.bottom = `${keyboardHeight}px`;
+                                } else {
+                                    inputContainer.style.bottom = '0px';
+                                }
+                            }
+                        });
+                    }
                 }
             }
         }

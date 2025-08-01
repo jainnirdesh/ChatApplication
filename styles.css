@@ -518,6 +518,8 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
 .message-input-container {
     border-top: 1px solid #e0e0e0;
     background: white;
+    position: relative;
+    z-index: 10;
 }
 
 .formatting-toolbar {
@@ -977,6 +979,12 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
         display: block;
     }
 
+    /* Ensure body doesn't scroll behind input */
+    body {
+        position: relative;
+        overflow-x: hidden;
+    }
+
     /* Login screen adjustments */
     .login-container {
         padding: 30px 20px;
@@ -1063,9 +1071,21 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
     }
 
     /* Message input adjustments */
+    .message-input-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 1px solid #e0e0e0;
+        z-index: 100;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
     .input-area {
         padding: 15px;
         gap: 10px;
+        margin: 0;
     }
 
     .input-area input {
@@ -1079,14 +1099,28 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
         font-size: 1em;
     }
 
+    /* Adjust messages container to account for fixed input */
+    .messages-container {
+        padding: 15px 15px 80px 15px; /* Extra bottom padding for fixed input */
+        height: calc(100vh - 200px); /* Account for header and input */
+        overflow-y: auto;
+    }
+
+    /* Ensure main chat takes full height */
+    .main-chat {
+        height: 100vh;
+        overflow: hidden;
+    }
+
     /* Emoji picker and formatting toolbar positioning */
     .emoji-picker {
         position: fixed;
-        bottom: 90px;
+        bottom: 70px; /* Above the fixed input */
         right: 15px;
         left: 15px;
         max-width: none;
         max-height: 150px;
+        z-index: 101;
     }
 
     .emoji-grid {
@@ -1102,11 +1136,12 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
 
     .formatting-toolbar {
         position: fixed;
-        bottom: 90px;
+        bottom: 70px; /* Above the fixed input */
         left: 15px;
         right: 15px;
         justify-content: center;
         flex-wrap: wrap;
+        z-index: 101;
     }
 
     /* Notification adjustments */
@@ -1163,6 +1198,14 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
 
     .input-area {
         padding: 12px;
+    }
+
+    /* Ensure fixed positioning is maintained */
+    .message-input-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
 
     .chat-header {
