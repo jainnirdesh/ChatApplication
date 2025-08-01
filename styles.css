@@ -10,6 +10,13 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent zoom on iOS when focusing inputs */
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+    font-size: 16px;
 }
 
 /* Screen Management */
@@ -136,11 +143,34 @@ body {
     padding: 20px;
     background: #34495e;
     border-bottom: 1px solid #3a4a5c;
+    position: relative;
 }
 
 .sidebar-header h2 {
     margin-bottom: 15px;
     font-size: 1.5em;
+}
+
+/* Mobile close button */
+.mobile-close-btn {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.mobile-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .user-info {
@@ -780,4 +810,447 @@ body {
     background: #007bff;
     color: white;
     border-color: #007bff;
+}
+
+/* Notification Styles */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification {
+    background: #2ecc71;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideInRight 0.3s ease, fadeOut 0.5s ease 4.5s forwards;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.notification.error {
+    background: #e74c3c;
+}
+
+.notification.warning {
+    background: #f39c12;
+}
+
+.notification.info {
+    background: #3498db;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Connection Status Styles */
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8em;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e74c3c;
+    animation: pulse 2s infinite;
+}
+
+.status-dot.connected {
+    background: #2ecc71;
+    animation: none;
+}
+
+.online-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.9em;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-menu-btn:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Mobile Overlay */
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* MOBILE RESPONSIVENESS */
+@media screen and (max-width: 768px) {
+    /* Show mobile menu button */
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    /* Show mobile close button in sidebar */
+    .mobile-close-btn {
+        display: block;
+    }
+
+    /* Login screen adjustments */
+    .login-container {
+        padding: 30px 20px;
+        margin: 20px;
+        max-width: none;
+        width: calc(100% - 40px);
+    }
+
+    .login-header h1 {
+        font-size: 2em;
+    }
+
+    .login-header i {
+        font-size: 2.5em;
+    }
+
+    /* Chat container adjustments */
+    .chat-container {
+        position: relative;
+    }
+
+    /* Sidebar mobile styles */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+        transform: translateZ(0); /* Hardware acceleration */
+    }
+
+    .sidebar.mobile-open {
+        left: 0;
+    }
+
+    /* Prevent body scroll when sidebar is open */
+    body.sidebar-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+    }
+
+    /* Main chat area takes full width on mobile */
+    .main-chat {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    /* Chat header adjustments */
+    .chat-header {
+        padding: 15px 60px 15px 15px;
+        position: relative;
+    }
+
+    .room-info h2 {
+        font-size: 1.2em;
+    }
+
+    .chat-actions {
+        gap: 5px;
+    }
+
+    .action-btn {
+        padding: 6px 8px;
+        font-size: 0.9em;
+    }
+
+    /* Messages container */
+    .messages-container {
+        padding: 15px;
+    }
+
+    .message {
+        max-width: 85%;
+    }
+
+    .message-content {
+        padding: 10px 14px;
+        border-radius: 16px;
+        font-size: 0.95em;
+    }
+
+    /* Message input adjustments */
+    .input-area {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .input-area input {
+        padding: 10px 14px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    #send-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1em;
+    }
+
+    /* Emoji picker and formatting toolbar positioning */
+    .emoji-picker {
+        position: fixed;
+        bottom: 90px;
+        right: 15px;
+        left: 15px;
+        max-width: none;
+        max-height: 150px;
+    }
+
+    .emoji-grid {
+        grid-template-columns: repeat(8, 1fr);
+        gap: 5px;
+        max-height: 120px;
+    }
+
+    .emoji-item {
+        font-size: 1.3em;
+        padding: 6px;
+    }
+
+    .formatting-toolbar {
+        position: fixed;
+        bottom: 90px;
+        left: 15px;
+        right: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Notification adjustments */
+    .notification-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .notification {
+        max-width: none;
+        margin-bottom: 5px;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        margin: 20px;
+        width: calc(100% - 40px);
+        max-width: none;
+    }
+
+    /* Welcome message */
+    .welcome-message {
+        padding: 20px;
+    }
+
+    .welcome-message i {
+        font-size: 2.5em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Extra small screens */
+    .login-container {
+        padding: 25px 15px;
+        margin: 15px;
+    }
+
+    .login-header h1 {
+        font-size: 1.8em;
+    }
+
+    .sidebar {
+        width: 260px;
+    }
+
+    .emoji-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    .input-area {
+        padding: 12px;
+    }
+
+    .chat-header {
+        padding: 12px 55px 12px 12px;
+    }
+
+    .room-info h2 {
+        font-size: 1.1em;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .login-container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .login-header h1 {
+        font-size: 1.8em;
+        margin-bottom: 5px;
+    }
+
+    .login-header i {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .welcome-message {
+        padding: 15px;
+    }
+
+    .welcome-message i {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch devices */
+    .room-item {
+        padding: 16px 12px;
+    }
+
+    .user-item {
+        padding: 12px 8px;
+    }
+
+    .action-btn,
+    .format-btn,
+    .create-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .emoji-item {
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Remove hover effects on touch devices */
+    .room-item .room-delete-btn {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    /* Improve touch feedback */
+    .mobile-menu-btn:active,
+    .mobile-close-btn:active,
+    #send-btn:active,
+    .action-btn:active {
+        transform: scale(0.95);
+    }
+    
+    /* Remove tap highlight on WebKit browsers */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+/* High DPI screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .status-dot {
+        width: 10px;
+        height: 10px;
+    }
 }

@@ -35,11 +35,22 @@
 
     <!-- Main Chat Interface -->
     <div id="chat-screen" class="screen">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Mobile Overlay -->
+        <div id="mobile-overlay" class="mobile-overlay"></div>
+        
         <div class="chat-container">
             <!-- Sidebar -->
             <div class="sidebar">
                 <div class="sidebar-header">
                     <h2><i class="fas fa-comments"></i> Real-Time Chat</h2>
+                    <button id="mobile-close-btn" class="mobile-close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
                     <div class="user-info">
                         <i class="fas fa-user"></i>
                         <span id="current-user">Guest</span>
@@ -312,6 +323,21 @@
                 
                 // Click outside to close panels
                 document.addEventListener('click', (e) => this.handleOutsideClick(e));
+                
+                // Mobile menu functionality
+                document.getElementById('mobile-menu-btn').addEventListener('click', () => this.toggleMobileSidebar());
+                document.getElementById('mobile-close-btn').addEventListener('click', () => this.closeMobileSidebar());
+                document.getElementById('mobile-overlay').addEventListener('click', () => this.closeMobileSidebar());
+                
+                // Close mobile sidebar when room is selected
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.room-item') && window.innerWidth <= 768) {
+                        setTimeout(() => this.closeMobileSidebar(), 300);
+                    }
+                });
+                
+                // Handle window resize
+                window.addEventListener('resize', () => this.handleResize());
             }
             
             handleLogin() {
@@ -747,6 +773,54 @@
                 setTimeout(() => {
                     notification.remove();
                 }, 3000);
+            }
+            
+            // Mobile sidebar functionality
+            toggleMobileSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.getElementById('mobile-overlay');
+                const isOpen = sidebar.classList.contains('mobile-open');
+                
+                if (isOpen) {
+                    this.closeMobileSidebar();
+                } else {
+                    this.openMobileSidebar();
+                }
+            }
+            
+            openMobileSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.getElementById('mobile-overlay');
+                
+                sidebar.classList.add('mobile-open');
+                overlay.classList.add('active');
+                document.body.classList.add('sidebar-open');
+                
+                // Store current scroll position
+                this.scrollPosition = window.pageYOffset;
+                document.body.style.top = `-${this.scrollPosition}px`;
+            }
+            
+            closeMobileSidebar() {
+                const sidebar = document.querySelector('.sidebar');
+                const overlay = document.getElementById('mobile-overlay');
+                
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+                document.body.classList.remove('sidebar-open');
+                
+                // Restore scroll position
+                document.body.style.top = '';
+                if (this.scrollPosition !== undefined) {
+                    window.scrollTo(0, this.scrollPosition);
+                }
+            }
+            
+            handleResize() {
+                // Close mobile sidebar when switching to desktop view
+                if (window.innerWidth > 768) {
+                    this.closeMobileSidebar();
+                }
             }
         }
         
