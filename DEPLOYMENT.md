@@ -19,9 +19,9 @@
 3. **Set Environment Variables** in Vercel Dashboard:
    - Go to your project settings
    - Add these environment variables:
-     - `REACT_APP_SUPABASE_URL` = your Supabase project URL
-     - `REACT_APP_SUPABASE_ANON_KEY` = your Supabase anon key
-     - `REACT_APP_SUPABASE_SERVICE_ROLE_KEY` = your service role key
+     - `VITE_SUPABASE_URL` = https://pbjbbnhvoreczalgegcj.supabase.co
+     - `VITE_SUPABASE_ANON_KEY` = your Supabase anon key
+     - `VITE_SUPABASE_SERVICE_ROLE_KEY` = your service role key
 
 4. **Deploy**:
    - Click "Deploy"
